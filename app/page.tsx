@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer,
@@ -11,11 +10,11 @@ import { TRIP_IDS, type TripId } from "@/lib/data";
 
 export default function OverviewPage() {
   const [trip, setTrip] = useState<TripId>("Trip60");
-  const s = computeTripSummary(trip);
+  const s       = computeTripSummary(trip);
   const profile = generateSpeedProfile(trip);
 
   const radarData = [
-    { axis: "Quality",        value: s.qualityScore    },
+    { axis: "Quality",        value: s.qualityScore           },
     { axis: "Lat. Dynamics",  value: s.engineering.latScore   },
     { axis: "Engineering",    value: s.engineeringScore       },
     { axis: "After Sales",    value: s.afterSalesScore        },
@@ -25,7 +24,7 @@ export default function OverviewPage() {
 
   const statusOf = (score: number) =>
     score >= 80 ? { label: "Healthy", color: "#10b981" }
-    : score >= 60 ? { label: "Watch", color: "#f59e0b" }
+    : score >= 60 ? { label: "Watch",   color: "#f59e0b" }
     : { label: "Attention", color: "#ef4444" };
 
   const qSt = statusOf(s.qualityScore);
@@ -41,17 +40,17 @@ export default function OverviewPage() {
           subtitle={`${s.meta.label} · All three team signals at a glance · Score: 0-100`}
           color="#ffffff"
         />
+
         <div className="flex justify-center gap-2 mb-6">
           {TRIP_IDS.map((t) => (
             <button key={t} onClick={() => setTrip(t)}
               className={`px-4 py-1.5 rounded-full text-xs font-mono font-medium border transition-all ${
                 t === trip ? "bg-white/10 border-white/30 text-white" : "border-white/10 text-white/30 hover:text-white/60"
               }`}
-            >
-              {t.replace("Trip", "Trip ")}
-            </button>
+            >{t.replace("Trip", "Trip ")}</button>
           ))}
         </div>
+
         <div className="grid grid-cols-3 gap-6 mb-6">
           <Card className="flex flex-col gap-4">
             <div className="flex items-start justify-between">
@@ -68,6 +67,7 @@ export default function OverviewPage() {
               <ScoreBar label="Suspension"  score={s.quality.suspScore}  />
             </div>
           </Card>
+
           <Card className="flex flex-col gap-4">
             <div className="flex items-start justify-between">
               <div>
@@ -83,6 +83,7 @@ export default function OverviewPage() {
               <ScoreBar label="Yaw Rate"       score={s.engineering.yawScore}  />
             </div>
           </Card>
+
           <Card className="flex flex-col gap-4">
             <div className="flex items-start justify-between">
               <div>
@@ -99,9 +100,13 @@ export default function OverviewPage() {
             </div>
           </Card>
         </div>
+
         <div className="grid grid-cols-[1fr_300px] gap-6">
           <Card>
-            <h3 className="text-xs text-white/40 font-mono uppercase tracking-widest mb-3">Trip Speed &amp; Acceleration Profile</h3>
+            <div className="flex items-center justify-between mb-1">
+              <h3 className="text-xs text-white/40 font-mono uppercase tracking-widest">Trip Speed &amp; Acceleration Profile</h3>
+              <span className="text-[10px] text-amber-400/70 font-mono">⚠ Illustrative — aggregate KPIs only, not real time-series (I-04)</span>
+            </div>
             <ResponsiveContainer width="100%" height={220}>
               <LineChart data={profile} margin={{ top: 4, right: 24, bottom: 4, left: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
@@ -115,6 +120,7 @@ export default function OverviewPage() {
               </LineChart>
             </ResponsiveContainer>
           </Card>
+
           <Card>
             <h3 className="text-xs text-white/40 font-mono uppercase tracking-widest mb-3">Health Radar</h3>
             <ResponsiveContainer width="100%" height={220}>
@@ -126,6 +132,7 @@ export default function OverviewPage() {
             </ResponsiveContainer>
           </Card>
         </div>
+
         <div className="grid grid-cols-4 gap-4 mt-6">
           {[
             { label: "Distance",  value: `${s.meta.distance_km} km` },
